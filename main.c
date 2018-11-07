@@ -9,7 +9,7 @@ typedef struct tabela_t
 	int linha;
 	int coluna;
 	char tamanho[50+1][50+1];
-	
+	unsigned int chave_p;
 }Tabela;
 
 typedef struct coluna_t
@@ -22,6 +22,8 @@ typedef struct coluna_t
 void comandos(); // imprime os comandos na tela
 void criar_tab(); // cria um arquivo com uma tabela 
 void listar_tab(); // lista todos os arquivos-tabela
+void nova_linha(); // adiciona uma nova linha na tabela escolhida
+void editar_valores(); // modifica os valores coluna a coluna dado o numero da chave primaria
 
 int main()
 {
@@ -41,6 +43,12 @@ int main()
 			break;
 		case 2:
 			listar_tab();
+			break;
+		case 3:
+			//nova_linha();
+			break;
+		case 4:
+			//editar_valores();
 			break;
 		default:
 			printf("Comando inválido! Tente novamente.\n");// caso o comando recebido nao esteja entre 0 e 9
@@ -73,6 +81,7 @@ void criar_tab()
 	FILE *BD_tabelas;
 	char nome_tabela[20+1];
 	char chave_p[20];
+	int cont_chave = 0;
 	int i, j;
 
 	printf("informe um nome para a tabela a ser criada: ");
@@ -95,14 +104,11 @@ void criar_tab()
 		fprintf(BD_tabelas, "%s\n", nome_tabela);
 	
 		/*imprime uma tabela simples no arquivo 'tabela', para saber se o programa funciona*/
-		fprintf(tabela, "nome1 | nome2 | nome3 |\n");
+		fprintf(tabela, "%s | nome1 | nome2 | nome3 |\n", chave_p);
 		for(i = 0; i < 5; i++)
 		{
-			for(j = 0; j < 3; j++)
-			{
-				fprintf(tabela, "%d     | %d     | %d     |\n", 1, 2, 3);
-			}
-			printf("\n");
+			cont_chave++;
+			fprintf(tabela, "%d    | %d    | %d    | %d    |\n", cont_chave, 34, 22, 13);
 		}
 
 	}
