@@ -80,35 +80,50 @@ void criar_tab()
 	FILE *tabela;
 	FILE *BD_tabelas;
 	char nome_tabela[20+1];
+	char nome_tab[20+1];
 	char chave_p[20];
 	int cont_chave = 0;
 	int i, j;
 
-	printf("informe um nome para a tabela a ser criada: ");
+	/*guarda a tabela criada no arquivo que servirá como banco de dados dos nomes das tabelas*/
+	BD_tabelas = fopen("tabelasSGBD.txt", "a+");
+	//fprintf(BD_tabelas, "%s\n", nome_tabela);
+
+	printf("Informe um nome para a tabela a ser criada: ");
 	scanf("%s", nome_tabela);
+	
+	/*verifica no banco de tabelas se o nome fornecido já existe*/
+	while(fscanf(BD_tabelas, "%s", nome_tab) != EOF)
+	{
+		if(strcmp(nome_tab, nome_tabela) == 0) //se a tabela já existe, encerra o programa e informa ao usuario
+		{
+			printf("Essa tabela já existe\nInforme outro nome, por favor.\n");
+			exit(1);
+		}
+	}
+	
+	/*se já nao existir uma tabela com o nome fornecido, entao a nova tabela é adicionada ao banco de tabelas*/
+	fprintf(BD_tabelas, "%s\n", nome_tabela);
 
 	tabela = fopen(nome_tabela, "w+");
+
 	if(tabela == NULL)
 	{
 		/*em caso de erro na alocação*/
-		printf("erro na abertura do arquivo!\n"); 
+		printf("Erro na abertura do arquivo!\n"); 
 	}
 	else
 	{
-		/*recebe a chave primaria, mas ainda sem qualquer uso*/
-		printf("digite o nome da chave primaria: ");
+		/*recebe a chave primaria*/
+		printf("Digite o nome da chave primaria: ");
 		scanf("%s", chave_p);
 	
-		/*guarda a tabela criada no arquivo que servirá como banco de dados dos nomes das tabelas*/
-		BD_tabelas = fopen("tabelasSGBD.txt", "a+");
-		fprintf(BD_tabelas, "%s\n", nome_tabela);
-	
 		/*imprime uma tabela simples no arquivo 'tabela', para saber se o programa funciona*/
-		fprintf(tabela, "%s | nome1 | nome2 | nome3 |\n", chave_p);
+		fprintf(tabela, "%s\t| nome1\t| nome2\t| nome3\t|\n", chave_p);
 		for(i = 0; i < 5; i++)
 		{
 			cont_chave++;
-			fprintf(tabela, "%d    | %d    | %d    | %d    |\n", cont_chave, 34, 22, 13);
+			fprintf(tabela, " %d\t| %d\t| %d\t| %d\t|\n", cont_chave, 45, 67, 78);
 		}
 
 	}
@@ -121,8 +136,10 @@ void criar_tab()
 void listar_tab()
 {
 	FILE *BD_tabelas;
-	char nome_tab[50];
+	char nome_tab[20];
 	
+	printf("Tabelas Existentes:\n\n");
+
 	/*acessa o arquivo com a lista de todas as tabelas que já foram criadas*/
 	BD_tabelas = fopen("tabelasSGBD.txt", "r+");
 	
