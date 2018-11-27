@@ -2,21 +2,32 @@
 #include <stdlib.h>
 #include <string.h>
 
+//enum tipos = {};
+
 /*structs ainda sem uso*/
+typedef struct chave_primaria
+{
+	char *nome;
+	int contador;
+}Chave_P;
+
 typedef struct tabela_t
 {
 	char nome[20+1];
 	int linha;
 	int coluna;
 	char tamanho[50+1][50+1];
-	unsigned int chave_p;
+	Chave_P chave_pri;
+	//char *nome_chave_p;
+	//unsigned int chave_p;
 }Tabela;
 
 typedef struct coluna_t
 {
 	char *nome_coluna;
 	char *conteudo_col;
-	unsigned int chave;
+	char tipo_col[20];
+	//unsigned int chave;
 }Coluna;
 
 void comandos(); // imprime os comandos na tela
@@ -29,6 +40,8 @@ int main()
 {
 	int comando;
 	FILE *p_arquivo;
+	
+	printf("----------------------------------------------------- SGBD - ITP --------------------------------------------------------\n");
 
 	comandos();
 	
@@ -83,9 +96,10 @@ void criar_tab()
 	char nome_tab[20+1];
 	char chave_p[20];
 	int cont_chave = 0;
+	int n_colunas;
 	int i, j;
 
-	/*guarda a tabela criada no arquivo que servirá como banco de dados dos nomes das tabelas*/
+	/*Abre o arquivo banco de dados com os nomes das tabelas existentes*/
 	BD_tabelas = fopen("tabelasSGBD.txt", "a+");
 	//fprintf(BD_tabelas, "%s\n", nome_tabela);
 
@@ -97,7 +111,7 @@ void criar_tab()
 	{
 		if(strcmp(nome_tab, nome_tabela) == 0) //se a tabela já existe, encerra o programa e informa ao usuario
 		{
-			printf("Essa tabela já existe\nInforme outro nome, por favor.\n");
+			printf("Essa tabela já existe\nTente novamente com outro nome, por favor.\n");
 			exit(1);
 		}
 	}
@@ -117,14 +131,35 @@ void criar_tab()
 		/*recebe a chave primaria*/
 		printf("Digite o nome da chave primaria: ");
 		scanf("%s", chave_p);
-	
-		/*imprime uma tabela simples no arquivo 'tabela', para saber se o programa funciona*/
+		
+		printf("quantas colunas terá a nova tabela?: ");
+		scanf("%d", &n_colunas);
+//LEMBRAR DE CONTINUAR DAQUI		
+		//Coluna colunas[n_colunas]; //vetor de structs do tipo coluna
+		char coluns[n_colunas][20];
+		fprintf(tabela, "| %s |", chave_p);
+		
+		for(i = 0; i < n_colunas; i++)				//codigo funciona, mas preciso ajeitar essa bagunça e usar struct.
+		{
+			printf("informe o nome da coluna:\n");
+			scanf("%s", coluns[i]);
+
+			//printf("tipo da coluna:\n");	
+			//scanf(" %s", colunas[i].tipo_col);
+		}
+		
+		for(i = 0; i < n_colunas; i++)
+		{
+			fprintf(tabela, " %s |", coluns[i]);
+		}
+//CONTINUAR DAQUI
+		/*imprime uma tabela simples no arquivo 'tabela', para saber se o programa funciona
 		fprintf(tabela, "%s\t| nome1\t| nome2\t| nome3\t|\n", chave_p);
 		for(i = 0; i < 5; i++)
 		{
 			cont_chave++;
 			fprintf(tabela, " %d\t| %d\t| %d\t| %d\t|\n", cont_chave, 45, 67, 78);
-		}
+		}*/
 
 	}
 	
