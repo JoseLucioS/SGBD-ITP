@@ -27,11 +27,11 @@ typedef struct tabela_t
 }Tabela;
 
 void comandos(); // imprime os comandos na tela
-void criar_tab(); // cria um arquivo com uma tabela 
-void listar_tab(); // lista todos os arquivos-tabela
+void criar_tabela(); // cria um arquivo com uma tabela 
+void listar_tabela(); // lista todos os arquivos-tabela
 void nova_linha(); // adiciona uma nova linha na tabela escolhida
 void editar_valores(); // modifica os valores coluna a coluna dado o numero da chave primaria
-void apagar_tab(); // apaga a tabela com o nome fornecido
+void apagar_tabela(); // apaga a tabela com o nome fornecido
 
 int main()
 {
@@ -50,10 +50,10 @@ int main()
 	switch(comando)
 	{
 		case 1:
-			criar_tab();
+			criar_tabela();
 			break;
 		case 2:
-			listar_tab();
+			listar_tabela();
 			break;
 		case 3:
 			//nova_linha();
@@ -65,7 +65,7 @@ int main()
 			apagar_tab();
 				break;
 		default:
-			printf("Comando inválido! Tente novamente.\n");// caso o comando recebido nao esteja entre 0 e 9
+			printf("Comando inválido! Tente novamente.\n"); // caso o comando recebido nao esteja entre 0 e 9
 	}
 
 	return 0;
@@ -88,7 +88,7 @@ void comandos()
 	puts("");
 }
 
-void criar_tab()
+void criar_tabela()
 {
 	FILE *tabela;
 	FILE *BD_tabelas;
@@ -133,9 +133,10 @@ void criar_tab()
 		printf("Digite o nome da chave primaria: ");
 		scanf("%s", chave_p);
 		
+		/*recebe o numero de colunas*/
 		printf("quantas colunas terá a nova tabela?: ");
 		scanf("%d", &n_colunas);
-//LEMBRAR DE CONTINUAR DAQUI		
+		
 		char coluns[n_colunas][20];
 		char tipo_coluns[n_colunas][10];
 
@@ -155,7 +156,6 @@ void criar_tab()
 		{
 			fprintf(tabela, " %s (%s) |", coluns[i], tipo_coluns[i]);
 		}
-//CONTINUAR DAQUI
 	
 	}
 	
@@ -164,7 +164,7 @@ void criar_tab()
 	fclose(BD_tabelas);
 }
 
-void listar_tab()
+void listar_tabela()
 {
 	FILE *BD_tabelas;
 	char nome_tab[20];
@@ -184,7 +184,7 @@ void listar_tab()
 	fclose(BD_tabelas);
 }
 
-void apagar_tab()
+void apagar_tabela()
 {
 	char *nome;
 	char *nome_aux;
