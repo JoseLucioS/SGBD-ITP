@@ -4,42 +4,40 @@
 
 //enum tipos = {};
 
-/*structs ainda sem uso*/
 typedef struct chave_primaria
 {
 	char *nome;
-	int contador;
+	unsigned int contador;
 }Chave_P;
-
-typedef struct tabela_t
-{
-	char nome[20+1];
-	int linha;
-	int coluna;
-	char tamanho[50+1][50+1];
-	Chave_P chave_pri;
-	//char *nome_chave_p;
-	//unsigned int chave_p;
-}Tabela;
 
 typedef struct coluna_t
 {
 	char *nome_coluna;
-	char *conteudo_col;
-	char tipo_col[20];
-	//unsigned int chave;
+	char *tipo_coluna;
 }Coluna;
+
+typedef struct tabela_t
+{
+	char nome[20+1];
+	int linhas;
+	int colunas;
+//	char tamanho[50+1][50+1];
+	Coluna *ptr_col;
+	Chave_P chave_pri;
+}Tabela;
 
 void comandos(); // imprime os comandos na tela
 void criar_tab(); // cria um arquivo com uma tabela 
 void listar_tab(); // lista todos os arquivos-tabela
 void nova_linha(); // adiciona uma nova linha na tabela escolhida
 void editar_valores(); // modifica os valores coluna a coluna dado o numero da chave primaria
+void apagar_tab(); // apaga a tabela com o nome fornecido
 
 int main()
 {
 	int comando;
 	FILE *p_arquivo;
+//	Tabela *ptr_tabela;
 	
 	printf("----------------------------------------------------- SGBD - ITP --------------------------------------------------------\n");
 
@@ -63,6 +61,9 @@ int main()
 		case 4:
 			//editar_valores();
 			break;
+		case 9:
+			apagar_tab();
+				break;
 		default:
 			printf("Comando inválido! Tente novamente.\n");// caso o comando recebido nao esteja entre 0 e 9
 	}
@@ -81,15 +82,14 @@ void comandos()
 	printf("5 - Criar nova coluna na tabela;\n");
 	printf("6 - Listar todos os dados de uma tabela;\n");
 	printf("7 - Pesquisar valor em uma tabela;\n");
-	printf("8 - Apagar valor de uma tabela;\n");
+	printf("8 - Apagar valor de uma tabela;\n");*/
 	printf("9 - Apagar uma tabela;\n");
-	printf("0 - Encerrar o programa.\n");*/
+	//printf("0 - Encerrar o programa.\n");
 	puts("");
 }
 
 void criar_tab()
 {
-	/*funcao sem fazer uso das structs no momento*/
 	FILE *tabela;
 	FILE *BD_tabelas;
 	char nome_tabela[20+1];
@@ -98,6 +98,7 @@ void criar_tab()
 	int cont_chave = 0;
 	int n_colunas;
 	int i, j;
+	char *nome_coluna, *tipo_coluna;
 
 	/*Abre o arquivo banco de dados com os nomes das tabelas existentes*/
 	BD_tabelas = fopen("tabelasSGBD.txt", "a+");
@@ -135,32 +136,27 @@ void criar_tab()
 		printf("quantas colunas terá a nova tabela?: ");
 		scanf("%d", &n_colunas);
 //LEMBRAR DE CONTINUAR DAQUI		
-		//Coluna colunas[n_colunas]; //vetor de structs do tipo coluna
 		char coluns[n_colunas][20];
+		char tipo_coluns[n_colunas][10];
+
 		fprintf(tabela, "| %s |", chave_p);
 		
-		for(i = 0; i < n_colunas; i++)				//codigo funciona, mas preciso ajeitar essa bagunça e usar struct.
+		for(i = 0; i < n_colunas; i++)			
 		{
 			printf("informe o nome da coluna:\n");
-			scanf("%s", coluns[i]);
+			scanf("%s", coluns[i]);  
 
-			//printf("tipo da coluna:\n");	
-			//scanf(" %s", colunas[i].tipo_col);
+			printf("tipo da coluna:\n");	
+			scanf("%s", tipo_coluns[i]);
+			
 		}
 		
 		for(i = 0; i < n_colunas; i++)
 		{
-			fprintf(tabela, " %s |", coluns[i]);
+			fprintf(tabela, " %s (%s) |", coluns[i], tipo_coluns[i]);
 		}
 //CONTINUAR DAQUI
-		/*imprime uma tabela simples no arquivo 'tabela', para saber se o programa funciona
-		fprintf(tabela, "%s\t| nome1\t| nome2\t| nome3\t|\n", chave_p);
-		for(i = 0; i < 5; i++)
-		{
-			cont_chave++;
-			fprintf(tabela, " %d\t| %d\t| %d\t| %d\t|\n", cont_chave, 45, 67, 78);
-		}*/
-
+	
 	}
 	
 	/*fecha os arquivos abertos anteriormente*/
@@ -186,4 +182,36 @@ void listar_tab()
 	
 	/*fecha o arquivo aberto anteriormente*/
 	fclose(BD_tabelas);
+}
+
+void apagar_tab()
+{
+	char *nome;
+	char *nome_aux;
+	char linha[20], *tabela;
+	FILE *arquivo_inicial, *arquivo_post;
+
+	printf("informe o nome da tabela: ");
+	scanf("%s", nome);
+
+	//abre o arquivo de tabelas salvas no modo leitura
+	arquivo_inicial = fopen("tabelasSGBD.txt", "r");
+	
+	//abre um arquivo auxiliar para receber os nomes das tabelas, com exceçao daquele que se quer apagar
+	arquivo_post = fopen("tabelasSGBD.post", "w");
+
+	while((fgets(linha, sizeof(linha), arquivo_inicial)) != NULL)
+	{
+		tabela = strtok(linha, ";");
+		if(strcmp(tabela, nome) != 0) //verifica se o nome na tabela é igual ao nome da tabela que se quer apagar
+		{
+			fprintf(arquivo_post, "%s\n", tabela); // se os nomes forem diferentes, copia-se a string 'tabela' para o novo arquivo
+		}
+	}
+	
+	/*fecha os arquivos abertos inicialmente*/
+	fclose(arquivo_post);
+	fclose(arquivo_inicial);
+	remove("tabelasSGBD.txt"); //apaga o antigo arquivo que lista as tabelas existentes
+	rename("tabelasSGBD.post", "tabelasSGBD.txt"); // muda o nome do novo arquivo para o nome padrao 'tabelasSGBD.txt'
 }
