@@ -35,5 +35,5 @@
  - Repositório online para armazenamento e documentação do código (GitHub), pois além de ser uma sugestão do nosso professor, é também uma alternativa relevante para se trabalhar em grupo ou quando se usa mais de um console para desenvolver o projeto. 
 
  O que poderia ser mudado:
-  A parte principal que poderia ser mudada seria o acréscimo das demais funções, que deixaram de ser implementadas devido ao tempo relativamente curto para a dar conta das outras disciplinas do curso e da implementação. Ademais, o uso de structs e alocação dinâmica otimizariam muito o projeto, usando somente a memória necessária, sem desperdicíos.
+  A parte principal que poderia ser mudada seria o acréscimo das demais funções, que deixaram de ser implementadas devido ao tempo relativamente curto para a dar conta das outras disciplinas do curso e da implementação, e a modularização externa do programa. Ademais, o uso de structs e alocação dinâmica otimizariam muito o projeto, usando somente a memória necessária, sem desperdicíos.
   Outro ponto interessante seria a utilização de nomes mais adequados para as variáveis, para melhorar a compreensão do código. Além disso, alguns erros e falhas precisam ser corrigidos no programa, pois alguns compiladores rodam o código e outros não.
